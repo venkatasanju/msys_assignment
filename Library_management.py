@@ -2,11 +2,13 @@ class Library:
     def __init__(self,Books):
         self.Books=Books
         self.lend_book_d={}
-    
+    # this method displays all the available books.  
     def display_books(self):
         print("Available books in library: ")
         for b in self.Books:
             print(b)
+            
+    # this method is used for lending a book  from the library by user
     def lend_book(self,username,bookname):
         if bookname not in Books:
             print("Book is not present!! Please enter a valid bookname or check the spelling")
@@ -18,10 +20,13 @@ class Library:
                 self.Books.remove(bookname)
             else:
                 print("Book is not available, its being used by the user {}:".format(self.lend_book_d[bookname]))
-            
+    
+    # this method is used to add a book to library by librarian
     def add_book(self,bookname):
         self.Books.append(bookname)
         print("Book is added to library.Updated book list: {}".format(self.Books))
+    
+    # this method is used to return a book by user.
     def return_book(self,username,bookname):
         if bookname not in self.lend_book_d.keys():
             print("Book is not present!! Please enter a valid bookname or check the spelling")
@@ -29,12 +34,14 @@ class Library:
             self.lend_book_d.pop(bookname)
             self.Books.append(bookname)
             print("Book {} is successfully returned by {}".format(bookname,username))
+    
+    # this method is used to remove a book from the library by librarian
     def remove_book(self,bookname):
         #print("Available booklist - {} : {}".format(bookname,self.Books))
         self.Books.remove(bookname)
         print("Book: {} is removed by Librarian".format(bookname))
         print("Updated booklist after the deletion of book {} : {}".format(bookname,self.Books))
-        
+
 Books=['OS by Galvin','Data Strctures','Unix','Shell Scripting','5 am club','C','Java','Web technologies','M1','Drawing']
 Lib=Library(Books)
 
@@ -50,6 +57,7 @@ while(True):
         count=count+1
     profile=user
     if profile == "user":
+        # the below are options available for the user.
         print("Please enter your choice:")
         print("1. Display available books ")
         print("2. Lend a book")
@@ -60,6 +68,7 @@ while(True):
             print("User selected choice is not present, please enter valid option")
             continue
     elif profile=="librarian":
+        # below are options available for the librarian.
         print("Please enter your choice:")
         print("1. Display available books")
         print("4. Add a book")
