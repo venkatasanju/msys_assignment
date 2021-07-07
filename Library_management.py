@@ -1,48 +1,50 @@
+import logging
+
 class Library:
     def __init__(self,Books):
         self.Books=Books
         self.lend_book_d={}
     # this method displays all the available books.  
     def display_books(self):
-        print("Available books in library: ")
-        for b in self.Books:
-            print(b)
+        logging.info("Available books in library: ")
+        for b,c in self.Books.items():
+            print(b,c)
             
     # this method is used for lending a book  from the library by user
     def lend_book(self,username,bookname):
-        if bookname not in Books:
-            print("Book is not present!! Please enter a valid bookname or check the spelling")
+        if bookname not in self.Books.keys():
+            logging.error("Book is not present!! it might be due to invalid bookname or book is currently not available")
+        elif not self.Books[bookname]:
+            logging.error("Book is not present!! it might be due to currently not available")
         else:
-            if bookname not in self.lend_book_d.keys():
-                self.lend_book_d.update({bookname:username})
-                print("Hi {}, Book is available in library, you can lend {} book now".format(username,bookname))
-                print("Updated lend data: {}".format(self.lend_book_d))
-                self.Books.remove(bookname)
-            else:
-                print("Book is not available, its being used by the user {}:".format(self.lend_book_d[bookname]))
+            self.lend_book_d.update({bookname:username})
+            print("Hi {}, Book is available in library, you can lend {} book now".format(username,bookname))
+            print("Updated lend data: {}".format(self.lend_book_d))
+            self.Books[bookname]=self.Books[bookname]-1
+        
     
     # this method is used to add a book to library by librarian
-    def add_book(self,bookname):
-        self.Books.append(bookname)
-        print("Book is added to library.Updated book list: {}".format(self.Books))
+    def add_book(self,bookname,copies):
+        self.Books.update({bookname:copies})
+        logging.info("Book is added to library.Updated book list: {}".format(self.Books))
     
     # this method is used to return a book by user.
     def return_book(self,username,bookname):
         if bookname not in self.lend_book_d.keys():
-            print("Book is not present!! Please enter a valid bookname or check the spelling")
+            logging.error("Please enter a valid bookname or check the spelling")
         else:
             self.lend_book_d.pop(bookname)
-            self.Books.append(bookname)
-            print("Book {} is successfully returned by {}".format(bookname,username))
+            self.Books[bookname]=self.Books[bookname]+1
+            logging.info("Book {} is successfully returned by {}".format(bookname,username))
     
     # this method is used to remove a book from the library by librarian
     def remove_book(self,bookname):
         #print("Available booklist - {} : {}".format(bookname,self.Books))
-        self.Books.remove(bookname)
-        print("Book: {} is removed by Librarian".format(bookname))
-        print("Updated booklist after the deletion of book {} : {}".format(bookname,self.Books))
+        self.Books.pop(bookname)
+        logging.info("Book: {} is removed by Librarian".format(bookname))
+        logging.info("Updated booklist after the deletion of book {} : {}".format(bookname,self.Books))
 
-Books=['OS by Galvin','Data Strctures','Unix','Shell Scripting','5 am club','C','Java','Web technologies','M1','Drawing']
+Books={'OS by Galvin':2,'Data Strctures':3,'Unix':2,'Shell Scripting':1,'5 am club':5,'C':2,'Java':0,'Web technologies':4,'M1':1,'Drawing':1}
 Lib=Library(Books)
 
  
@@ -92,7 +94,8 @@ while(True):
         Lib.return_book(username,bookname)
     elif choice==4:
         bookname=input("Enter the name of the book to be added: ")
-        Lib.add_book(bookname)
+        copies=input("Enter number of copies to be added: ")
+        Lib.add_book(bookname,copies)
     elif choice ==5:
         bookname=input("Enter the name of the book to be deleted from library: ")
         Lib.remove_book(bookname)
@@ -105,3 +108,4 @@ while(True):
         exit()
     elif continue_choice=='c' or continue_choice=='C':
         continue
+
